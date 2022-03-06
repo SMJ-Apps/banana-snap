@@ -13,6 +13,9 @@
 <p align="center">
 Snap a picture of your finished bananagrams to view your awesome score and vet your friend's word choice
 </p>
+<p align="center">
+Makes scoring Bananagrams a snap!
+</p>
 
 ## Resources
 
