@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ImageSelectView: View {
     
-    @State var isPresenting: Bool = false
-    @State var uiImage: UIImage?
-    @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var isPresenting: Bool = false
+    @State private var uiImage: UIImage?
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     var classifier = Classifier()
-    @State var bananaGrid = BananaGrid(bananaTiles: [])
-    @State var hasResultsToDisplay: Bool = false
+    @State private var bananaGrid = BananaGrid(bananaTiles: [])
+    @State private var hasResultsToDisplay: Bool = false
+    @State private var textFound = ""
     
     var body: some View {
         NavigationView {
@@ -51,7 +52,7 @@ struct ImageSelectView: View {
                               }
                             }
                           )
-//                NavigationLink(destination: BoardView(bananaGrid: bananaGrid), isActive: $hasResultsToDisplay) {
+                Text(textFound)
                 NavigationLink(destination: BoardView(bananaGrid: bananaGrid)) {
                     Text("Snap!")
                         .font(.title2)
@@ -67,6 +68,7 @@ struct ImageSelectView: View {
             .padding()
             .navigationTitle("Banana Snap")
         }
+        .navigationViewStyle(.stack) // Without this, you get auto layout warnings for some reason when using .navigationTitle. Not sure this is the actual style we want. Not sure why this fixes the problem either.
         
     }
     
@@ -75,10 +77,17 @@ struct ImageSelectView: View {
         classifier.detect(uiImage: image)
         if let results = classifier.results {
             let gridBuilder = GridBuilder(observations: results)
-            if let grid = gridBuilder.findBananaGrid() {
+            if let grid = gridBuilder.createBananaGrid() {
                 bananaGrid = grid
                 hasResultsToDisplay = true
             }
+            
+            var textFound = ""
+            for text in results {
+                textFound += text.topCandidate() + "; "
+            }
+            self.textFound = textFound
+            
         }
     }
 }
