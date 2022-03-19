@@ -13,8 +13,9 @@ struct ImageSelectView: View {
     @State var uiImage: UIImage?
     @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
-    
-    let bananaGrid = BananaGrid(bananaTiles: [])
+    var classifier = Classifier()
+    @State var bananaGrid = BananaGrid(bananaTiles: [])
+    @State var hasResultsToDisplay: Bool = false
     
     var body: some View {
         NavigationView {
@@ -50,15 +51,17 @@ struct ImageSelectView: View {
                               }
                             }
                           )
+//                NavigationLink(destination: BoardView(bananaGrid: bananaGrid), isActive: $hasResultsToDisplay) {
                 NavigationLink(destination: BoardView(bananaGrid: bananaGrid)) {
                     Text("Snap!")
                         .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(!hasResultsToDisplay)
                 
             }
             
-            .sheet(isPresented: $isPresenting) {
+            .sheet(isPresented: $isPresenting, onDismiss: analyzeImage) {
                 ImagePicker(uiImage: $uiImage, isPresenting: $isPresenting, sourceType: $sourceType)
             }
             .padding()
@@ -68,7 +71,15 @@ struct ImageSelectView: View {
     }
     
     private func analyzeImage() {
-        
+        guard let image = uiImage else { return }
+        classifier.detect(uiImage: image)
+        if let results = classifier.results {
+            let gridBuilder = GridBuilder(observations: results)
+            if let grid = gridBuilder.findBananaGrid() {
+                bananaGrid = grid
+                hasResultsToDisplay = true
+            }
+        }
     }
 }
 

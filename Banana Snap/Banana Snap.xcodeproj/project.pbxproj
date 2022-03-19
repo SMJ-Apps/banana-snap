@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2210508127E5823300681355 /* Classifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2210508027E5823300681355 /* Classifier.swift */; };
 		222205BB27E4E3F4009119F6 /* ImageSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205BA27E4E3F4009119F6 /* ImageSelectView.swift */; };
 		222205BF27E4E719009119F6 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205BE27E4E719009119F6 /* BoardView.swift */; };
 		222205C327E4E75F009119F6 /* GridBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205C127E4E75E009119F6 /* GridBuilder.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2210508027E5823300681355 /* Classifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classifier.swift; sourceTree = "<group>"; };
 		222205BA27E4E3F4009119F6 /* ImageSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectView.swift; sourceTree = "<group>"; };
 		222205BE27E4E719009119F6 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		222205C127E4E75E009119F6 /* GridBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridBuilder.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				222205C227E4E75F009119F6 /* BananaGrid.swift */,
 				222205C127E4E75E009119F6 /* GridBuilder.swift */,
+				2210508027E5823300681355 /* Classifier.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				556404CF27D1DE8500B220C9 /* ContentView.swift in Sources */,
+				2210508127E5823300681355 /* Classifier.swift in Sources */,
 				222205C627E4E7E5009119F6 /* BananaTileView.swift in Sources */,
 				222205BF27E4E719009119F6 /* BoardView.swift in Sources */,
 				222205C427E4E75F009119F6 /* BananaGrid.swift in Sources */,
