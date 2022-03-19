@@ -62,7 +62,7 @@ class Classifier {
             try requestHandler.perform([self.ocrRequest])
         } catch let error {
             print(error)
-            //TODO: Maybe display to user
+            //TODO: Maybe display error to user
         }
         
     }

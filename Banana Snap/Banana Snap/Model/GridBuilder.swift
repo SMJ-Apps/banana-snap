@@ -14,41 +14,67 @@ struct ObservedLetter {
     var boundingBox: CGRect
 }
 
+/// GridBuilder
+///
+/// Usage.
+/// Upon init, either pass in an array of VNRecognizedTextObservation, or ObservedLetter.
+/// If the former, it will convert that array to an array of "ObservedLetter" which is a struct containing two elements:
+///  - text: String
+///  - boundingBox: CGRect
+///
+///  It will build and return a BananaGrid? object after running "createBananaGrid()"
 class GridBuilder {
     
-    var observations: [VNRecognizedTextObservation]!
-    var observedLetters = [ObservedLetter]()
+    private var observedLetters = [ObservedLetter]()
+    private var observations: [VNRecognizedTextObservation]!
     
-    var grid: [[String]] = [[]]
-    var gridSize: (rows: Int, columns: Int) = (0, 0)
-    var rowYValues = [CGFloat]()
-    var columnXValues = [CGFloat]()
+    private var grid: [[String]] = [[]]
+    private var gridSize: (rows: Int, columns: Int) = (0, 0)
+    private var rowYValues = [CGFloat]()
+    private var columnXValues = [CGFloat]()
     
-    let ROW_VERTICAL_TOLERANCE: CGFloat = 0.1
-    let COLUMN_HORIZONTAL_TOLERANCE: CGFloat = 0.1
+    private let ROW_VERTICAL_TOLERANCE: CGFloat = 0.1       // May need to adjust these after testing
+    private let COLUMN_HORIZONTAL_TOLERANCE: CGFloat = 0.1  //
     
     init(observations: [VNRecognizedTextObservation]) {
         self.observations = observations
         convertTextObservationsToLetters()
     }
     
-    func convertTextObservationsToLetters() {
+    init(observedLetters: [ObservedLetter]) {
+        self.observedLetters = observedLetters
+    }
+    
+    func createBananaGrid() -> BananaGrid? {
+        guard !observedLetters.isEmpty else {
+            print("No observations found")
+            return nil
+        }
+        findGridSize()
+        fillGridWithBlanks()
+        buildGrid()
+        printGrid()
+        
+        return convertGridToBananaGrid()
+    }
+    
+    private func convertTextObservationsToLetters() {
         for observation in observations {
-            if let text = observation.topCandidates(1).first?.string {
-                if text.count == 1 {
-                    let observedLetter = ObservedLetter(text: text, boundingBox: observation.boundingBox)
-                    observedLetters.append(observedLetter)
-                } else {
-                    let multiLetters = breakApartWord(observation)
-                    for letter in multiLetters {
-                        observedLetters.append(letter)
-                    }
+            let text = observation.topCandidate()
+            
+            if text.count == 1 {
+                let observedLetter = ObservedLetter(text: text, boundingBox: observation.boundingBox)
+                observedLetters.append(observedLetter)
+            } else {
+                let multiLetters = breakApartWord(observation)
+                for letter in multiLetters {
+                    observedLetters.append(letter)
                 }
             }
         }
     }
     
-    func breakApartWord(_ observation: VNRecognizedTextObservation) -> [ObservedLetter] {
+    private func breakApartWord(_ observation: VNRecognizedTextObservation) -> [ObservedLetter] {
         guard let observedWord = observation.topCandidates(1).first?.string
         else {
             return []
@@ -58,23 +84,15 @@ class GridBuilder {
         
         var observedLetters = [ObservedLetter]()
         
-        for index in 0 ..< observedWord.count {
-            let letter = observedWord[observedWord.index(observedWord.startIndex, offsetBy: index)]
+        for (index, letter) in observedWord.enumerated() {
             let newObservedLetter = ObservedLetter(text: "\(letter)", boundingBox: newBoxes[index])
             observedLetters.append(newObservedLetter)
         }
-//
-//        for letter in observedWord {
-//            let index = observedWord.firstIndex(of: letter)!
-//            let i = index.utf16Offset(in: observedWord)
-//            let newObservedLetter = ObservedLetter(text: "\(letter)", boundingBox: newBoxes[i])
-//            observedLetters.append(newObservedLetter)
-//        }
-        
+
         return observedLetters
     }
     
-    func calculateIndividualBoxesFor(_ observation: VNRecognizedTextObservation, wordLength: Int) -> [CGRect] {
+    private func calculateIndividualBoxesFor(_ observation: VNRecognizedTextObservation, wordLength: Int) -> [CGRect] {
         
         let wordWidth = observation.boundingBox.width
         let wordHeight = observation.boundingBox.height
@@ -95,33 +113,8 @@ class GridBuilder {
         return newBoxes
         
     }
-    
-    func findAndPrintCharacterGrid() {
-        guard !observedLetters.isEmpty else {
-            print("No observations found")
-            return
-        }
-        findGridSize()
-        fillGridWithBlanks()
-        buildGrid()
-        printGrid()
-        
-    }
-    
-    func findBananaGrid() -> BananaGrid? {
-        guard !observedLetters.isEmpty else {
-            print("No observations found")
-            return nil
-        }
-        findGridSize()
-        fillGridWithBlanks()
-        buildGrid()
-        printGrid()
-        
-        return convertGridToBananaGrid()
-    }
-    
-    func findGridSize() {
+       
+    private func findGridSize() {
         
         let rows = countRows()
         let columns = countColumns()
@@ -130,7 +123,7 @@ class GridBuilder {
         
     }
     
-    func countRows() -> Int {
+    private func countRows() -> Int {
         
         let verticalSortedObservations = observedLetters.sorted {
             $0.boundingBox.midY < $1.boundingBox.midY
@@ -151,7 +144,7 @@ class GridBuilder {
         return rowYValues.count
     }
     
-    func countColumns() -> Int {
+    private func countColumns() -> Int {
         let horizontalSortedObservations = observedLetters.sorted {
             $0.boundingBox.midX < $1.boundingBox.midX
         }
@@ -172,12 +165,12 @@ class GridBuilder {
     }
     
     
-    func fillGridWithBlanks() {
+    private func fillGridWithBlanks() {
         
         grid = [[String]](repeating: [String](repeating: "", count: gridSize.columns), count: gridSize.rows)
     }
     
-    func buildGrid() {
+    private func buildGrid() {
         for observation in observedLetters {
             let row = closestRowIndexFor(observedLetter: observation)
             let column = closestColumnIndexFor(observedLetter: observation)
@@ -187,7 +180,7 @@ class GridBuilder {
         }
     }
     
-    func closestRowIndexFor(observedLetter: ObservedLetter) -> Int {
+    private func closestRowIndexFor(observedLetter: ObservedLetter) -> Int {
         var index = gridSize.rows
         for value in rowYValues {
             if value + ROW_VERTICAL_TOLERANCE > observedLetter.boundingBox.midY &&
@@ -201,7 +194,7 @@ class GridBuilder {
         return -1
     }
     
-    func closestColumnIndexFor(observedLetter: ObservedLetter) -> Int {
+    private func closestColumnIndexFor(observedLetter: ObservedLetter) -> Int {
         var index = 0
         for value in columnXValues {
             if value + COLUMN_HORIZONTAL_TOLERANCE > observedLetter.boundingBox.midX &&
@@ -215,7 +208,7 @@ class GridBuilder {
         return -1
     }
 
-    func printGrid() {
+    private func printGrid() {
         
         for row in grid {
             for column in row {
@@ -225,7 +218,7 @@ class GridBuilder {
         }
     }
     
-    func convertGridToBananaGrid() -> BananaGrid? {
+    private func convertGridToBananaGrid() -> BananaGrid? {
         
         var bananaTiles = [[BananaTile]]()
         
@@ -238,5 +231,15 @@ class GridBuilder {
         }
         
         return BananaGrid(bananaTiles: bananaTiles)
+    }
+}
+
+extension VNRecognizedTextObservation {
+    func topCandidate() -> String {
+        if let text = self.topCandidates(1).first?.string {
+            return text
+        } else {
+            return ""
+        }
     }
 }
