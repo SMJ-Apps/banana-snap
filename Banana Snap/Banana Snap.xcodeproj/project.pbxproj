@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222205BB27E4E3F4009119F6 /* ImageSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205BA27E4E3F4009119F6 /* ImageSelectView.swift */; };
+		222205BF27E4E719009119F6 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205BE27E4E719009119F6 /* BoardView.swift */; };
+		222205C327E4E75F009119F6 /* GridBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205C127E4E75E009119F6 /* GridBuilder.swift */; };
+		222205C427E4E75F009119F6 /* BananaGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205C227E4E75F009119F6 /* BananaGrid.swift */; };
+		222205C627E4E7E5009119F6 /* BananaTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205C527E4E7E5009119F6 /* BananaTileView.swift */; };
+		222205CC27E54E83009119F6 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222205CB27E54E83009119F6 /* ImagePicker.swift */; };
 		556404CD27D1DE8500B220C9 /* Banana_SnapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556404CC27D1DE8500B220C9 /* Banana_SnapApp.swift */; };
 		556404CF27D1DE8500B220C9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556404CE27D1DE8500B220C9 /* ContentView.swift */; };
 		556404D127D1DE8600B220C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 556404D027D1DE8600B220C9 /* Assets.xcassets */; };
@@ -34,6 +40,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		222205BA27E4E3F4009119F6 /* ImageSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectView.swift; sourceTree = "<group>"; };
+		222205BE27E4E719009119F6 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		222205C127E4E75E009119F6 /* GridBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridBuilder.swift; sourceTree = "<group>"; };
+		222205C227E4E75F009119F6 /* BananaGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BananaGrid.swift; sourceTree = "<group>"; };
+		222205C527E4E7E5009119F6 /* BananaTileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BananaTileView.swift; sourceTree = "<group>"; };
+		222205CB27E54E83009119F6 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		2297B67627E57B6B003C2012 /* Banana-Snap-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Banana-Snap-Info.plist"; sourceTree = SOURCE_ROOT; };
 		556404C927D1DE8500B220C9 /* Banana Snap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Banana Snap.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		556404CC27D1DE8500B220C9 /* Banana_SnapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banana_SnapApp.swift; sourceTree = "<group>"; };
 		556404CE27D1DE8500B220C9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +84,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		222205B927E4E3D1009119F6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				222205BA27E4E3F4009119F6 /* ImageSelectView.swift */,
+				222205CB27E54E83009119F6 /* ImagePicker.swift */,
+				222205BE27E4E719009119F6 /* BoardView.swift */,
+				222205C527E4E7E5009119F6 /* BananaTileView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		222205C027E4E723009119F6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				222205C227E4E75F009119F6 /* BananaGrid.swift */,
+				222205C127E4E75E009119F6 /* GridBuilder.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		556404C027D1DE8500B220C9 = {
 			isa = PBXGroup;
 			children = (
@@ -96,7 +129,10 @@
 			children = (
 				556404CC27D1DE8500B220C9 /* Banana_SnapApp.swift */,
 				556404CE27D1DE8500B220C9 /* ContentView.swift */,
+				222205B927E4E3D1009119F6 /* Views */,
 				556404D027D1DE8600B220C9 /* Assets.xcassets */,
+				2297B67627E57B6B003C2012 /* Banana-Snap-Info.plist */,
+				222205C027E4E723009119F6 /* Model */,
 				556404D227D1DE8600B220C9 /* Preview Content */,
 			);
 			path = "Banana Snap";
@@ -258,6 +294,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				556404CF27D1DE8500B220C9 /* ContentView.swift in Sources */,
+				222205C627E4E7E5009119F6 /* BananaTileView.swift in Sources */,
+				222205BF27E4E719009119F6 /* BoardView.swift in Sources */,
+				222205C427E4E75F009119F6 /* BananaGrid.swift in Sources */,
+				222205CC27E54E83009119F6 /* ImagePicker.swift in Sources */,
+				222205C327E4E75F009119F6 /* GridBuilder.swift in Sources */,
+				222205BB27E4E3F4009119F6 /* ImageSelectView.swift in Sources */,
 				556404CD27D1DE8500B220C9 /* Banana_SnapApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,9 +461,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Banana Snap/Preview Content\"";
-				DEVELOPMENT_TEAM = YM57P42RPR;
+				DEVELOPMENT_TEAM = 4C592246MX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Banana-Snap-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Banana Snap needs access to the camera to take pictures of your game";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,7 +476,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.jameseaster.Banana-Snap";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.widgetilities.Banana-Snap";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -448,9 +492,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Banana Snap/Preview Content\"";
-				DEVELOPMENT_TEAM = YM57P42RPR;
+				DEVELOPMENT_TEAM = 4C592246MX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Banana-Snap-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Banana Snap needs access to the camera to take pictures of your game";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -461,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.jameseaster.Banana-Snap";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.widgetilities.Banana-Snap";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
