@@ -7,9 +7,11 @@
 
 import SwiftUI
 
+
 struct ImageSelectView: View {
     
-    @State private var isPresenting: Bool = false
+    @State private var isPhotoPresenting: Bool = false
+    @State private var isCameraPresenting: Bool = false
     @State private var uiImage: UIImage?
     @State private var overlay: [PreviewBox] = []
     @State private var imageSize = CGSize()
@@ -26,17 +28,20 @@ struct ImageSelectView: View {
             VStack{
                 HStack{
                     Spacer()
-                    Image(systemName: "photo")
-                        .onTapGesture {
-                            isPresenting = true
-                            sourceType = .photoLibrary
-                        }
+                    Button(action: { isPhotoPresenting.toggle() }) {
+                        Label("", systemImage: "photo")
+                    }
+                    .sheet(isPresented: $isPhotoPresenting, onDismiss: analyzeImage) {
+                        ImagePicker(uiImage: $uiImage, isPresenting: $isPhotoPresenting, sourceType: $sourceType)
+                    }
+                    
                     Spacer()
-                    Image(systemName: "camera")
-                        .onTapGesture {
-                            isPresenting = true
-                            sourceType = .camera
-                        }
+                    Button(action: { isCameraPresenting.toggle() }) {
+                        Label("", systemImage: "camera")
+                    }
+                    .sheet(isPresented: $isCameraPresenting, onDismiss: analyzeImage) {
+                        DocumentScanner(uiImage: $uiImage, isPresenting: $isCameraPresenting)
+                    }
                     Spacer()
                 }
                 .font(.largeTitle)
@@ -50,7 +55,6 @@ struct ImageSelectView: View {
                             if uiImage != nil {
                                 Image(uiImage: uiImage!)
                                     .resizable()
-//                                    .scaledToFit()
                                     .readSize { imSize in
                                         imageSize = imSize
                                     }
@@ -79,9 +83,6 @@ struct ImageSelectView: View {
                 
             }
             
-            .sheet(isPresented: $isPresenting, onDismiss: analyzeImage) {
-                ImagePicker(uiImage: $uiImage, isPresenting: $isPresenting, sourceType: $sourceType)
-            }
             .padding()
             .navigationTitle("Banana Snap")
         }

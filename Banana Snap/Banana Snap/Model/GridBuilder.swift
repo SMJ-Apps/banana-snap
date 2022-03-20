@@ -59,8 +59,10 @@ class GridBuilder {
     }
     
     private func convertTextObservationsToLetters() {
+        
         for observation in observations {
-            let text = observation.topCandidate()
+            
+            let text = filteredWord(observation.topCandidate())
             
             if text.count == 1 {
                 let observedLetter = ObservedLetter(text: text, boundingBox: observation.boundingBox)
@@ -73,23 +75,30 @@ class GridBuilder {
             }
         }
     }
-    
+          
     private func breakApartWord(_ observation: VNRecognizedTextObservation) -> [ObservedLetter] {
         guard let observedWord = observation.topCandidates(1).first?.string
         else {
             return []
         }
+        let text = filteredWord(observedWord)
         
-        let newBoxes = calculateIndividualBoxesFor(observation, wordLength: observedWord.count)
+        let newBoxes = calculateIndividualBoxesFor(observation, wordLength: text.count)
         
         var observedLetters = [ObservedLetter]()
         
-        for (index, letter) in observedWord.enumerated() {
+        for (index, letter) in text.enumerated() {
             let newObservedLetter = ObservedLetter(text: "\(letter)", boundingBox: newBoxes[index])
             observedLetters.append(newObservedLetter)
         }
 
         return observedLetters
+    }
+    
+    private func filteredWord(_ word: String) -> String {
+        var text = word.components(separatedBy: CharacterSet.punctuationCharacters).joined()
+        text = text.components(separatedBy: " ").joined()
+        return text
     }
     
     private func calculateIndividualBoxesFor(_ observation: VNRecognizedTextObservation, wordLength: Int) -> [CGRect] {
