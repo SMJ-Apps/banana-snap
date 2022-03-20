@@ -24,18 +24,21 @@ class Classifier {
         ocrRequest = VNRecognizeTextRequest { [weak self] (request, error) in
             self?.ocrRequestCompletion(request, error: error)
         }
-        ocrRequest.recognitionLevel = .accurate
-        ocrRequest.recognitionLanguages = ["en-US", "en-GB"]
-        ocrRequest.usesLanguageCorrection = true
-        let aScalars = "A".unicodeScalars
-        let aCode = aScalars[aScalars.startIndex].value
-
-        let characters: [Character] = (0..<26).map {
-            i in Character(UnicodeScalar(aCode + i)!)
-        }
-        var letters = characters.map{"\($0)"}
-        letters += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-        ocrRequest.customWords = letters
+//        ocrRequest.minimumTextHeight = 0.07
+//        ocrRequest.recognitionLevel = .accurate
+//        ocrRequest.recognitionLanguages = ["en-US", "en-GB"]
+//        ocrRequest.usesLanguageCorrection = true
+        
+        
+//        let aScalars = "A".unicodeScalars
+//        let aCode = aScalars[aScalars.startIndex].value
+//
+//        let characters: [Character] = (0..<26).map {
+//            i in Character(UnicodeScalar(aCode + i)!)
+//        }
+//        var letters = characters.map{"\($0)"}
+//        letters += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+//        ocrRequest.customWords = letters
     }
     
     private func ocrRequestCompletion(_ request: VNRequest, error: Error?) {
