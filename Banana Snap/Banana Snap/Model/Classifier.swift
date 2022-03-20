@@ -45,13 +45,11 @@ class Classifier {
 
         var ocrText = ""
         for observation in observations {
-            guard let topCandidate = observation.topCandidates(1).first else {
-                return
-            }
-
-            ocrText += topCandidate.string + "\n"
+            let text = observation.topCandidate()
+            ocrText += text + "\n"
         }
         print("Results found: " + ocrText)
+
         results = observations
     }
     
@@ -64,6 +62,5 @@ class Classifier {
             print(error)
             //TODO: Maybe display error to user
         }
-        
     }
 }
