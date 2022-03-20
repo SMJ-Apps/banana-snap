@@ -11,12 +11,14 @@ struct ImageSelectView: View {
     
     @State private var isPresenting: Bool = false
     @State private var uiImage: UIImage?
+    @State private var overlay: [PreviewBox] = []
+    @State private var imageSize = CGSize()
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     var classifier = Classifier()
     @State private var bananaGrid = BananaGrid(bananaTiles: [])
     @State private var hasResultsToDisplay: Bool = false
-    @State private var textFound = ""
+    @State private var textFound = " "
     
     var body: some View {
         NavigationView {
@@ -44,14 +46,29 @@ struct ImageSelectView: View {
                     .strokeBorder()
                     .foregroundColor(.yellow)
                     .overlay(
-                            Group {
-                              if uiImage != nil {
+                        ZStack {
+                            if uiImage != nil {
                                 Image(uiImage: uiImage!)
-                                  .resizable()
-                                  .scaledToFit()
-                              }
+                                    .resizable()
+//                                    .scaledToFit()
+                                    .readSize { imSize in
+                                        imageSize = imSize
+                                    }
                             }
-                          )
+                            ForEach(overlay) { previewBox in
+                                ZStack{
+                                    Path(previewBox.boundingBox)
+                                        .foregroundColor(.red)
+                                        .opacity(0.5)
+                                    Text(previewBox.text)
+                                        .foregroundColor(.white)
+                                        .bold()
+                                        .position(x: previewBox.boundingBox.midX, y: previewBox.boundingBox.midY)
+                                    
+                                }
+                            }
+                        }
+                    )
                 Text(textFound)
                 NavigationLink(destination: BoardView(bananaGrid: bananaGrid)) {
                     Text("Snap!")
@@ -68,7 +85,7 @@ struct ImageSelectView: View {
             .padding()
             .navigationTitle("Banana Snap")
         }
-        .navigationViewStyle(.stack) // Without this, you get auto layout warnings for some reason when using .navigationTitle. Not sure this is the actual style we want. Not sure why this fixes the problem either.
+        .navigationViewStyle(.stack) // Without this, you get auto layout warnings for some reason when using .navigationTitle. Not sure this is the actual style we want. Not sure why this fixes the problem either. SwiftUI bug, I guess.
         
     }
     
@@ -82,15 +99,53 @@ struct ImageSelectView: View {
                 hasResultsToDisplay = true
             }
             
+            var newOverlay = [PreviewBox]()
             var textFound = ""
             for text in results {
                 textFound += text.topCandidate() + "; "
+                
+                let resizedBoundingBox = CGRect(x: text.boundingBox.origin.x * imageSize.width,
+                                                y: imageSize.height - (text.boundingBox.origin.y * imageSize.height) - (text.boundingBox.height * imageSize.height),
+                                                width: text.boundingBox.width * imageSize.width,
+                                                height: text.boundingBox.height * imageSize.height)
+                let newPreviewBox = PreviewBox(boundingBox: resizedBoundingBox,
+                                               text: text.topCandidate(),
+                                               id: text.uuid)
+                newOverlay.append(newPreviewBox)
             }
+            self.overlay = newOverlay
             self.textFound = textFound
             
         }
     }
 }
+
+struct PreviewBox: Identifiable {
+    var boundingBox: CGRect
+    var text: String
+    var id: UUID
+}
+
+// MARK: - Extension to be able to get size of Image in order to create overlay
+extension View {
+  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    background(
+      GeometryReader { geometryProxy in
+        Color.clear
+          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+      }
+    )
+    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+  }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+
+
 
 struct ImageSelectView_Previews: PreviewProvider {
     static var previews: some View {
